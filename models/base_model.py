@@ -4,6 +4,7 @@
 import uuid
 from datetime import datetime
 
+
 class BaseModel:
     """
     Base class for all models, defining
@@ -15,8 +16,12 @@ class BaseModel:
 
     def __str__(self):
         """Returns a string representation of the instance."""
-        return "[{}] ({}) {}".format(self.__class__.__name__,
-                                    self.id, self.__dict__)
+        return (
+                "[{}] ({}) {}".format(
+                    self.__class__.__name__,
+                    self.id,
+                    self.__dict__)
+                )
 
     def save(self):
         """
