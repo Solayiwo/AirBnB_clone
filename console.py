@@ -16,8 +16,6 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
 
-    def show(self)
-
     def do_quit(self, arg):
         """Quit command to exit the program."""
         return True
@@ -58,7 +56,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if args[0] not in globals():
+        if args[0] not in ['BaseModel']:
             print("** class doesn't exist **")
             return
 
@@ -72,6 +70,23 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
         else:
             print(instance)
+
+    def do_all(self, arg):
+        """
+        Prints all string representation of all instances based or not on the class name.
+        Usage: all [<class name>]
+        """
+        if arg:
+            if arg not in ['BaseModel']:
+                print("** class doesn't exist **")
+                return
+
+            instances = [str(obj) for obj in storage.all(
+            ).values() if type(obj).__name__ == arg]
+        else:
+            instances = [str(obj) for obj in storage.all().values()]
+
+        print(instances)
 
 
 if __name__ == '__main__':
