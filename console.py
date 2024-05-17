@@ -5,6 +5,8 @@ Entry point of the command interpreter.
 """
 
 import cmd
+from models import storage
+from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
@@ -13,6 +15,8 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = '(hbnb) '
+
+    def show(self)
 
     def do_quit(self, arg):
         """Quit command to exit the program."""
@@ -26,6 +30,48 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Do nothing on an empty line input."""
         pass
+
+    def do_create(self, cls):
+        """
+        Creates a new instance of BaseModel, saves it and prints the id
+        Usage: create <class name>
+        """
+        if not cls:
+            print("** class name missing **")
+            return
+
+        try:
+            new_instance = eval(cls)()
+            storage.new(new_instance)
+            storage.save()
+            print(new_instance.id)
+        except NameError:
+            print("** class doesn't exist **")
+
+    def do_show(self, arg):
+        """
+        Prints the string representation of an instance based on the class name and id.
+        Usage: show <class name> <id>
+        """
+        args = arg.split()
+        if len(args) == 0:
+            print("** class name missing **")
+            return
+
+        if args[0] not in globals():
+            print("** class doesn't exist **")
+            return
+
+        if len(args) == 1:
+            print("** instance id missing **")
+            return
+
+        key = f"{args[0]}.{args[1]}"
+        instance = storage.all().get(key)
+        if not instance:
+            print("** no instance found **")
+        else:
+            print(instance)
 
 
 if __name__ == '__main__':
