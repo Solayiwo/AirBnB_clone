@@ -40,13 +40,15 @@ class FileStorage:
             json.dump(obj_dict, json_file)
 
     def reload(self):
-        """Deserializes the JSON file to __objects (only if the JSON file exists)."""
+        """Deserializes the JSON file to __objects"""
         if os.path.exists(self.__file_path):
             with open(self.__file_path, 'r') as json_file:
                 obj_dict = json.load(json_file)
                 for key, value in obj_dict.items():
                     cls_name = value["__class__"]
-                    models_dict = {'BaseModel': BaseModel, 'User': User, 'State': State,
-                                   'Place': Place, 'City': City, 'Amenity': Amenity, 'Review': Review}
+                    models_dict = {'BaseModel': BaseModel, 'User': User,
+                                   'State': State, 'Place': Place,
+                                   'City': City, 'Amenity': Amenity,
+                                   'Review': Review}
                     if cls_name in models_dict.keys():
                         self.__objects[key] = models_dict[cls_name](**value)

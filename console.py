@@ -22,7 +22,8 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
     models_dict = {'BaseModel': BaseModel, 'User': User, 'State': State,
-                   'Place': Place, 'City': City, 'Amenity': Amenity, 'Review': Review}
+                   'Place': Place, 'City': City, 'Amenity': Amenity,
+                   'Review': Review}
 
     def do_quit(self, arg):
         """Quit command to exit the program."""
@@ -56,7 +57,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, arg):
         """
-        Prints the string representation of an instance based on the class name and id.
+        Prints the string representation of an instance based
+        on the class name and id.
         Usage: show <class name> <id>
         """
         args = arg.split()
@@ -81,7 +83,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """
-        Prints all string representation of all instances based or not on the class name.
+        Prints all string representation of all instances based
+        or not on the class name.
         Usage: all [<class name>]
         """
         if arg:
@@ -98,7 +101,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, arg):
         """
-        Deletes an instance based on the class name and id, and saves the change.
+        Deletes an instance based on the class name and id,
+        and saves the change.
         Usage: destroy <class name> <id>
         """
         args = arg.split()
@@ -123,7 +127,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """
-        Updates an instance based on the class name and id by adding or updating attribute.
+        Updates an instance based on the class name and id by adding
+        or updating attribute.
         Usage: update <class name> <id> <attribute name> "<attribute value>"
         """
         args = arg.split()
