@@ -170,6 +170,21 @@ class HBNBCommand(cmd.Cmd):
 
         instance.save()
 
+    def default(self, line):
+        """
+        Default method to handle <class name>.all() and other unknown commands.
+        """
+        if line.endswith('.all()'):
+            class_name = line[:-6]
+            if class_name in self.models_dict.keys():
+                instances = [str(obj) for obj in storage.all(
+                ).values() if type(obj).__name__ == class_name]
+                print(instances)
+            else:
+                print("** class doesn't exist **")
+        else:
+            super().default(line)
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
