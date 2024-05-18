@@ -80,3 +80,7 @@ class TestCBaseModel(unittest.TestCase):
         self.assertEqual(self.model.updated_at, model1.updated_at)
         self.assertEqual(self.model.__str__(), model1.__str__())
         del model1
+
+
+if __name__ == '__main__':
+    unittest.main()
