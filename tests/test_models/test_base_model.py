@@ -52,8 +52,8 @@ class TestCBaseModel(unittest.TestCase):
         old_date = self.model.updated_at
         self.model.save()
         self.assertNotEqual(old_date, self.model.updated_at)
-        self.assertTrue(
-            (self.model.updated_at - self.model.created_at).total_seconds() >= 0)
+        self.assertTrue((self.model.updated_at - self.model.created_at)
+                        .total_seconds() >= 0)
 
     def test_to_dict_method(self):
         """
