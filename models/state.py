@@ -1,13 +1,13 @@
 #!/usr/bin/python3
-"""Define the State class"""
+"""
+State Module
+Defines the State class
+"""
 
-from models.basemodel import BaseModel
+from models.base_model import BaseModel
 
 
 class State(BaseModel):
-    """
-        - State class that inherits from BaseModel
-        - To manage the public class attributes(name)
-    """
+    """State class that inherits from BaseModel"""
 
     name = ""
