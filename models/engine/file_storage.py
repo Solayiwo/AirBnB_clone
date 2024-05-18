@@ -9,6 +9,7 @@ and deserialization of instances.
 import os
 import json
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -40,5 +41,6 @@ class FileStorage:
                 obj_dict = json.load(json_file)
                 for key, value in obj_dict.items():
                     cls_name = value["__class__"]
-                    if cls_name == "BaseModel":
-                        self.__objects[key] = BaseModel(**value)
+                    models_dict = {'BaseModel': BaseModel, 'User': User}
+                    if cls_name in models_dict.keys():
+                        self.__objects[key] = models_dict[cls_name](**value)

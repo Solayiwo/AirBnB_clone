@@ -7,6 +7,7 @@ Entry point of the command interpreter.
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -15,6 +16,7 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = '(hbnb) '
+    models_dict = {'BaseModel': BaseModel, 'User': User}
 
     def do_quit(self, arg):
         """Quit command to exit the program."""
@@ -56,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if args[0] not in ['BaseModel']:
+        if args[0] not in self.models_dict.keys():
             print("** class doesn't exist **")
             return
 
@@ -77,7 +79,7 @@ class HBNBCommand(cmd.Cmd):
         Usage: all [<class name>]
         """
         if arg:
-            if arg not in ['BaseModel']:
+            if arg not in self.models_dict.keys():
                 print("** class doesn't exist **")
                 return
 
@@ -87,6 +89,75 @@ class HBNBCommand(cmd.Cmd):
             instances = [str(obj) for obj in storage.all().values()]
 
         print(instances)
+
+    def do_destroy(self, arg):
+        """
+        Deletes an instance based on the class name and id, and saves the change.
+        Usage: destroy <class name> <id>
+        """
+        args = arg.split()
+        if len(args) == 0:
+            print("** class name missing **")
+            return
+
+        if args[0] not in globals():
+            print("** class doesn't exist **")
+            return
+
+        if len(args) == 1:
+            print("** instance id missing **")
+            return
+
+        key = f"{args[0]}.{args[1]}"
+        if key in storage.all():
+            del storage.all()[key]
+            storage.save()
+        else:
+            print("** no instance found **")
+
+    def do_update(self, arg):
+        """
+        Updates an instance based on the class name and id by adding or updating attribute.
+        Usage: update <class name> <id> <attribute name> "<attribute value>"
+        """
+        args = arg.split()
+        if len(args) == 0:
+            print("** class name missing **")
+            return
+
+        if args[0] not in self.models_dict.keys():
+            print("** class doesn't exist **")
+            return
+
+        if len(args) == 1:
+            print("** instance id missing **")
+            return
+
+        key = f"{args[0]}.{args[1]}"
+        instance = storage.all().get(key)
+        if not instance:
+            print("** no instance found **")
+            return
+
+        if len(args) == 2:
+            print("** attribute name missing **")
+            return
+
+        if len(args) == 3:
+            print("** value missing **")
+            return
+
+        attr_name = args[2]
+        attr_value = args[3].strip('"')
+
+        # Check if the attribute exists and cast to the correct type
+        if hasattr(instance, attr_name):
+            attr_type = type(getattr(instance, attr_name))
+            setattr(instance, attr_name, attr_type(attr_value))
+        else:
+            setattr(instance, attr_name, attr_value)
+
+        instance.save()
 
 
 if __name__ == '__main__':
