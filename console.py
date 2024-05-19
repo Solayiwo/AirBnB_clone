@@ -5,6 +5,7 @@ Entry point of the command interpreter.
 """
 
 import cmd
+import re
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -169,6 +170,101 @@ class HBNBCommand(cmd.Cmd):
             setattr(instance, attr_name, attr_value)
 
         instance.save()
+
+    def default(self, line):
+        """
+        Default method to handle <class name>.all() and other unknown commands.
+        """
+        if line.endswith('.all()'):
+            class_name = line[:-6]
+            if class_name in self.models_dict.keys():
+                instances = [str(obj) for obj in storage.all(
+                ).values() if type(obj).__name__ == class_name]
+                print(instances)
+            else:
+                print("** class doesn't exist **")
+        elif line.endswith('.count()'):
+            class_name = line[:-8]
+            if class_name in self.models_dict.keys():
+                count = len([str(obj) for obj in storage.all(
+                ).values() if type(obj).__name__ == class_name])
+                print(count)
+            else:
+                print("** class doesn't exist **")
+        elif '.show(' in line and line.endswith(')'):
+            parts = line.split('.show(')
+            class_name = parts[0]
+            if class_name in self.models_dict:
+                instance_id = parts[1][:-1].strip('"').strip("'")
+                key = f"{class_name}.{instance_id}"
+                instance = storage.all().get(key)
+                if not instance:
+                    print("** no instance found **")
+                else:
+                    print(instance)
+            else:
+                print("** class doesn't exist **")
+        elif '.destroy(' in line and line.endswith(')'):
+            parts = line.split('.destroy(')
+            class_name = parts[0]
+            if class_name in self.models_dict:
+                instance_id = parts[1][:-1].strip('"').strip("'")
+                key = f"{class_name}.{instance_id}"
+                if key in storage.all():
+                    del storage.all()[key]
+                    storage.save()
+                else:
+                    print("** no instance found **")
+            else:
+                print("** class doesn't exist **")
+        elif '.update(' in line and line.endswith(')'):
+            parts = line.split('.update(')
+            class_name = parts[0]
+            if class_name in self.models_dict:
+                match = re.search(r"{.+}", line)
+                if match:
+                    try:
+                        data = eval(match.group(0))
+                        args = parts[1][:-1].split(', ', 1)
+                        instance_id = args[0].strip('"').strip("'")
+                        key = f"{class_name}.{instance_id}"
+                        instance = storage.all().get(key)
+                        if not instance:
+                            print("** no instance found **")
+                        else:
+                            for k, v in data.items():
+                                if hasattr(instance, k):
+                                    attr_type = type(getattr(instance, k))
+                                    setattr(instance, k, attr_type(v))
+                                else:
+                                    setattr(instance, k, v)
+                                instance.save()
+                    except SyntaxError:
+                        print("** invalid format **")
+                    return
+                else:
+                    args = parts[1][:-1].split(', ')
+                    if len(args) != 3:
+                        print("** invalid format **")
+                        return
+                    instance_id = args[0].strip('"').strip("'")
+                    attr_name = args[1].strip('"').strip("'")
+                    attr_value = args[2].strip('"').strip("'")
+                    key = f"{class_name}.{instance_id}"
+                    instance = storage.all().get(key)
+                    if not instance:
+                        print("** no instance found **")
+                    else:
+                        if hasattr(instance, attr_name):
+                            attr_type = type(getattr(instance, attr_name))
+                            setattr(instance, attr_name, attr_type(attr_value))
+                        else:
+                            setattr(instance, attr_name, attr_value)
+                        instance.save()
+            else:
+                print("** class doesn't exist **")
+        else:
+            super().default(line)
 
 
 if __name__ == '__main__':
