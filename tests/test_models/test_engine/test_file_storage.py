@@ -44,7 +44,9 @@ class TestFileStorage(unittest.TestCase):
         """
         Test the all method of FileStorage class.
         """
+        self.assertIsNotNone(self.storage.all())
         self.assertIsInstance(self.storage.all(), dict)
+        self.assertIs(self.storage.all(), self.storage._FileStorage__objects)
 
     def test_new_base_model(self):
         """
