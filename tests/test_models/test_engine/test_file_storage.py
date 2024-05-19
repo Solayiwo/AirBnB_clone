@@ -116,7 +116,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn(key, self.storage.all())
         self.assertEqual(self.storage.all()[key], obj)
 
-    def test_save_user(self):
+    def test_save_base_model(self):
         """
         Test the save method of FileStorage class with User.
         """
@@ -126,6 +126,19 @@ class TestFileStorage(unittest.TestCase):
         with open("test_file.json", "r") as file:
             data = json.load(file)
             key = f"BaseModel.{obj.id}"
+            self.assertIn(key, data)
+            self.assertEqual(data[key], obj.to_dict())
+
+    def test_save_user(self):
+        """
+        Test the save method of FileStorage class with User.
+        """
+        obj = User()
+        self.storage.new(obj)
+        self.storage.save()
+        with open("test_file.json", "r") as file:
+            data = json.load(file)
+            key = f"User.{obj.id}"
             self.assertIn(key, data)
             self.assertEqual(data[key], obj.to_dict())
 
@@ -203,6 +216,7 @@ class TestFileStorage(unittest.TestCase):
         s = State()
         c = City()
         a = Amenity()
+        p = Place()
         r = Review()
         self.storage.new(b)
         self.storage.new(u)
@@ -210,6 +224,7 @@ class TestFileStorage(unittest.TestCase):
         self.storage.new(c)
         self.storage.new(a)
         self.storage.new(r)
+        self.storage.new(p)
         self.storage.save()
         self.storage._FileStorage__objects = {}
         self.storage.reload()
@@ -224,6 +239,8 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsInstance(self.storage.all()[f"City.{c.id}"], City)
         self.assertIn(f"Amenity.{a.id}", self.storage.all())
         self.assertIsInstance(self.storage.all()[f"Amenity.{a.id}"], Amenity)
+        self.assertIn(f"Place.{p.id}", self.storage.all())
+        self.assertIsInstance(self.storage.all()[f"Place.{p.id}"], Place)
         self.assertIn(f"Review.{r.id}", self.storage.all())
         self.assertIsInstance(self.storage.all()[f"Review.{r.id}"], Review)
 
