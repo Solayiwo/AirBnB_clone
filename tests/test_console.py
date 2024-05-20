@@ -294,6 +294,49 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd(f"show Review {r.id}")
             self.assertIn(u.id, f.getvalue().strip())
 
+    def test_default_all(self):
+        """
+        Test <class_name>.all() command
+        """
+        b = BaseModel()
+        u = User()
+        s = State()
+        c = City()
+        a = Amenity()
+        p = Place()
+        r = Review()
+        storage.new(b)
+        storage.new(u)
+        storage.new(s)
+        storage.new(c)
+        storage.new(a)
+        storage.new(r)
+        storage.new(p)
+        storage.save()
+        storage.reload()
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f"User.all()")
+            self.assertIn(u.id, f.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f"BaseModel.all()")
+            self.assertIn(b.id, f.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f"State.all()")
+            self.assertIn(s.id, f.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f"City.all()")
+            self.assertIn(c.id, f.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f"Amenity.all()")
+            self.assertIn(a.id, f.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f"Place.all()")
+            self.assertIn(p.id, f.getvalue().strip())
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f"Review.all()")
+            self.assertIn(r.id, f.getvalue().strip())
+
     def test_count(self):
         """
         Test count command

@@ -45,7 +45,7 @@ class TestCBaseModel(unittest.TestCase):
         expected_str = f"[BaseModel] ({self.model.id}) {self.model.__dict__}"
         self.assertEqual(str(self.model), expected_str)
 
-    def test_save_method(self):
+    def test_save(self):
         """
         Test the save method of the BaseModel class.
         """
