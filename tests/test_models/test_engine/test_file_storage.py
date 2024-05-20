@@ -118,6 +118,28 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn(key, self.storage.all())
         self.assertEqual(self.storage.all()[key], obj)
 
+    def test_file_path_exists(self):
+        """
+        Test that __file_path attribute exists.
+        """
+        self.assertTrue(hasattr(self.storage, "_FileStorage__file_path"))
+
+    def test_file_path_value(self):
+        """
+        Test the value of the __file_path attribute.
+        """
+        self.assertEqual(self.storage._FileStorage__file_path,
+                         "test_file.json")
+
+    def test_save_creates_file(self):
+        """
+        Test that save method creates a file with the correct path.
+        """
+        obj = BaseModel()
+        self.storage.new(obj)
+        self.storage.save()
+        self.assertTrue(os.path.exists("test_file.json"))
+
     def test_save_base_model(self):
         """
         Test the save method of FileStorage class with User.
@@ -125,6 +147,7 @@ class TestFileStorage(unittest.TestCase):
         obj = BaseModel()
         self.storage.new(obj)
         self.storage.save()
+        self.assertTrue(os.path.exists("test_file.json"))
         with open("test_file.json", "r") as file:
             data = json.load(file)
             key = f"BaseModel.{obj.id}"
