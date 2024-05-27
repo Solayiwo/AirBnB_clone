@@ -24,18 +24,19 @@ section.filters button:hover {
     opacity: .9;
 }
 
-.locations,
-.amenities {
+section.filters div.locations,
+section.filters div.amenities {
     height: 100%;
     width: 25%;
     float: left;
 }
 
-.locations {
+section.filters div.locations {
     border-right: 1px solid #DDD;
 }
 
-.locations h3, .amenities h3 {
+section.filters div.locations h3, 
+section.filters div.amenities h3 {
     font-weight: 600;
     margin-top: 20px;
     margin-bottom: 0px;
@@ -43,7 +44,8 @@ section.filters button:hover {
     margin-left: 30px;
 }
 
-.locations h4, .amenities h4 {
+section.filters div.locations h4, 
+section.filters div.amenities h4 {
     font-weight: 400;
     font-size: 14px;
     margin-top: 0px;
@@ -52,7 +54,8 @@ section.filters button:hover {
     margin-left: 30px;
 }
 
-.locations h2, .amenities h2 {
+section.filters div.locations h2, 
+section.filters div.amenities h2 {
     font-size: 16px;
 }
 
@@ -67,9 +70,9 @@ section.filters button:hover {
     z-index: 1;
 }
 
-.locations:hover .popover,
-.amenities:hover .popover
- {
+section.filters div.locations:hover .popover,
+section.filters div.amenities:hover .popover
+{
     display: block;
 }
 
